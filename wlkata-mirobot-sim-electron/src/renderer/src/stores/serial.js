@@ -17,6 +17,13 @@ export const useSerialStore = defineStore('serial', {
         logs: []
     }),
     actions: {
+        logJog(i, fromDeg, toDeg) {
+            this.appendLog({
+                dir: 'sys',
+                text: `Jog q${i + 1}: ${fromDeg}° -> ${toDeg}°`,
+                ts: Date.now()
+            })
+        },
         appendLog(entry) {
             // entry: {dir:'in'|'out'|'sys', text:string, ts:number}
             this.logs.push(entry)

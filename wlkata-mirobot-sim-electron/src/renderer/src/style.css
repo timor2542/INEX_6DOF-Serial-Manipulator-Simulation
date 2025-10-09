@@ -20,10 +20,26 @@ html {
   font-size: clamp(12px, 0.90vw, 18px) !important;
 }
 
+
 body {
   font-size: 1rem;
 }
-
+h1 
+{
+    margin: 0px;
+    padding: 0px;
+    /* font-family: BebasNeue; */
+    /* color: #777878; */
+    font-size: 2vw;
+}
+p
+{
+    margin: 0px;
+    padding: 0px;
+    /* font-family: BebasNeue; */
+    /* color: #777878; */
+    font-size: 0.5vw;
+}
 :root {
   --bg: #1e1e1e;
   --fg: #eee;
@@ -192,9 +208,14 @@ body,
 .el-divider.el-divider--vertical {
   margin: 0 clamp(6px, 0.6vw, 12px);
   height: 1.6em;
-  border-color: rgba(127, 127, 127, 0.25);
+  border-color: rgba(127, 127, 127, 0);
 }
 
+.el-divider.el-divider--horizontal {
+  margin: 0 clamp(6px, 0.6vw, 12px);
+  height: 1.6em;
+  border-color: rgba(127, 127, 127, 0);
+}
 /* Serial controls เท่านั้นที่ยืดเต็มแถวได้ */
 .serial-controls .el-input,
 .serial-controls .el-select {
@@ -251,6 +272,8 @@ body,
 
 /* ปุ่มเล็กใน viewer (Fit/Reset/+/−) ลด padding ลงเล็กน้อย */
 .viewer-overlay .el-button {
+  
+  font-size: clamp(11px, 0.85vw, 36px) !important;
   padding: clamp(2px, 0.25vw, 6px) clamp(6px, 0.5vw, 10px);
 }
 

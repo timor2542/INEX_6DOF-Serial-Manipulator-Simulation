@@ -1,17 +1,11 @@
 <template>
-  <div class="flex statusbar" style="height:100%; align-items:center;">
-    <!-- <div>Port: <b>{{ portLabel }}</b></div> -->
-    <!-- <el-divider direction="vertical" /> -->
-    <!-- <div>Baud: <b>{{ baud }}</b></div> -->
-    <!-- <el-divider direction="vertical" /> -->
-    <!-- <div>Connection: -->
-      <!-- <el-tag :type="connected ? 'success' : 'danger'">{{ connected ? 'Connected' : 'Disconnected' }}</el-tag> -->
-    <!-- </div> -->
-    <!-- <el-divider direction="vertical" /> -->
-    <div>Theme: <b>{{ themeText }}</b></div>
-
+  <div class="flex statusbar" style="font-size:0.95vw; height:100%; align-items:center;">
+    <!-- <div>Theme: <b>{{ themeText }}</b></div> -->
+    INSTRUCTION: <div>Hold <b>LEFT-MOUSE</b> to <b>ROTATE</b> and <b>RIGHT-MOUSE</b> to <b>PAN</b>.</div>
+    <el-divider direction="vertical" />
+    Credits: WLKATA Studio • Produced by Innovative Experiment Co, Ltd., Thailand.
     <div class="flex-1"></div>
-
+    <el-divider direction="vertical" />
     <div>{{ nowText }}</div>
   </div>
 </template>
