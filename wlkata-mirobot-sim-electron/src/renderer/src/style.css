@@ -245,7 +245,7 @@ body,
 /* input ยืด/ย่อได้ */
 .serial-actions {
   display: flex;
-  align-items: center;
+  align-items: right;
   gap: var(--gap);
 }
 

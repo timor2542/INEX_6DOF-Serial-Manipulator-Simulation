@@ -1,7 +1,7 @@
 <template>
   <div class="flex-col">
     <!-- สลับโหมดใหญ่: Joint / Coord -->
-    <el-segmented v-model="bigMode" :options="['Joint', 'Coord']" class="w-full" />
+    <!-- <el-segmented v-model="bigMode" :options="['Joint', 'Coord']" class="w-full" /> -->
 
     <!-- ===== JOINT ===== -->
     <div v-if="bigMode === 'Joint'" class="flex-col">

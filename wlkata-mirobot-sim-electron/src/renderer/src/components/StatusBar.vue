@@ -1,13 +1,13 @@
 <template>
   <div class="flex statusbar" style="height:100%; align-items:center;">
-    <div>Port: <b>{{ portLabel }}</b></div>
-    <el-divider direction="vertical" />
-    <div>Baud: <b>{{ baud }}</b></div>
-    <el-divider direction="vertical" />
-    <div>Connection:
-      <el-tag :type="connected ? 'success' : 'danger'">{{ connected ? 'Connected' : 'Disconnected' }}</el-tag>
-    </div>
-    <el-divider direction="vertical" />
+    <!-- <div>Port: <b>{{ portLabel }}</b></div> -->
+    <!-- <el-divider direction="vertical" /> -->
+    <!-- <div>Baud: <b>{{ baud }}</b></div> -->
+    <!-- <el-divider direction="vertical" /> -->
+    <!-- <div>Connection: -->
+      <!-- <el-tag :type="connected ? 'success' : 'danger'">{{ connected ? 'Connected' : 'Disconnected' }}</el-tag> -->
+    <!-- </div> -->
+    <!-- <el-divider direction="vertical" /> -->
     <div>Theme: <b>{{ themeText }}</b></div>
 
     <div class="flex-1"></div>

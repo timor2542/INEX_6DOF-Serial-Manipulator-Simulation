@@ -34,11 +34,21 @@
 
     <!-- Jog sliders -->
     <div class="jog-overlay"
-      style="position:absolute; bottom:10px; left:10px; width:340px; background:rgba(0,0,0,0.55); border-radius:8px; padding:10px;">
-      <div v-for="(q, i) in robot.joints" :key="i" style="display:flex; align-items:center; gap:6px; margin:4px 0;">
-        <span style="color:white; width:40px;">J{{ i + 1 }}</span>
-        <el-slider v-model="robot.joints[i]" :min="-180" :max="180" :step="1" style="flex:1;" />
-        <el-input-number v-model="robot.joints[i]" :min="-180" :max="180" :step="1" size="small" style="width:80px;" />
+      style="position:absolute; bottom:10px; left:10px; width:50%; background:rgba(0,0,0,0.3); border-radius:8px; padding:10px;">
+      <div v-for="(q, i) in robot.joints || []" :key="i"
+        style="display:flex; align-items:center; gap:6px; margin:4px 0;">
+        <span style="color:white; width:40px;">q{{ i + 1 }}</span>
+
+        <el-slider v-model="robot.joints[i]" :min="jointLimits[i]?.min ?? -180" :max="jointLimits[i]?.max ?? 180"
+          :step="1" style="flex:1;" />
+
+        <el-input-number v-model="robot.joints[i]" :min="jointLimits[i]?.min ?? -180" :max="jointLimits[i]?.max ?? 180"
+          :step="1" size="small" style="width:7rem" />
+
+
+        <span style="color:#ccc; font-size:0.8rem; width:5.5rem; text-align:right;">
+          [{{ jointLimits[i]?.min ?? -180 }}°, {{ jointLimits[i]?.max ?? 180 }}°]
+        </span>
       </div>
     </div>
   </div>
@@ -58,7 +68,17 @@ let renderer, scene, camera, controls, animId, ro
 const robot = useRobotStore()
 const theme = useThemeStore()
 const group = new THREE.Group()
-
+if (!robot.joints || !Array.isArray(robot.joints)) {
+  robot.joints = [0, 0, 0, 0, 0, 0]
+}
+const jointLimits = [
+  { min: -100, max: 160 }, // J1 base
+  { min: -40, max: 70 }, // J2 shoulder
+  { min: -170, max: 60 }, // J3 elbow
+  { min: -170, max: 170 }, // J4 wrist pitch
+  { min: -180, max: 36 }, // J5 wrist roll
+  { min: -180, max: 180 }  // J6 tool rotation
+]
 /* =========================================
    MDH Parameters (Craig Form) for WLKATA 6DOF
    ========================================= */
@@ -138,11 +158,11 @@ function init() {
 
   const w = canvasHost.value.clientWidth
   const h = canvasHost.value.clientHeight
-  camera = new THREE.PerspectiveCamera(50, w / h, 0.01, 1000)
-  camera.position.set(0.45, -0.55, 0.55)
+  camera = new THREE.PerspectiveCamera(35, w / h, 0.01, 2000)
+  camera.position.set(0, -1, 1)
   renderer = new THREE.WebGLRenderer({ antialias: true })
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-  renderer.setSize(w, h, false)
+  renderer.setSize(0, 0, false)
   canvasHost.value.appendChild(renderer.domElement)
   controls = new OrbitControls(camera, renderer.domElement)
   controls.enableDamping = true

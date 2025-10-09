@@ -13,7 +13,7 @@
             <STLViewer />
           </div>
           <div class="jog-wrap" style="width: clamp(240px, 28vw, 420px); min-width: 200px;">
-            <JogControl />
+            <!-- <JogControl /> -->
           </div>
         </div>
       </div>

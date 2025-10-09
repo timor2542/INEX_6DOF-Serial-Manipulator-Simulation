@@ -2,18 +2,18 @@
   <div class="flex-col" style="height:100%;">
     <!-- ONE ROW: mode + input + actions -->
     <div class="flex serial-controls compact">
-      <el-select v-model="mode" style="width: 120px;">
+      <!-- <el-select v-model="mode" style="width: 120px;">
         <el-option label="String" value="string" />
         <el-option label="HEX" value="hex" />
         <el-option label="BIN" value="bin" />
       </el-select>
 
-      <el-input v-model="outgoing" placeholder="Type & Enter to send" class="grow" @keyup.enter="send" />
+      <el-input v-model="outgoing" placeholder="Type & Enter to send" class="grow" @keyup.enter="send" /> -->
 
       <div class="serial-actions">
-        <el-button type="primary" @click="send">Send</el-button>
+        <!-- <el-button type="primary" @click="send">Send</el-button> -->
         <el-button @click="clear">Clear</el-button>
-        <el-tag :type="connected ? 'success' : 'danger'">{{ connected ? 'Online' : 'Offline' }}</el-tag>
+        <!-- <el-tag :type="connected ? 'success' : 'danger'">{{ connected ? 'Online' : 'Offline' }}</el-tag> -->
       </div>
     </div>
 

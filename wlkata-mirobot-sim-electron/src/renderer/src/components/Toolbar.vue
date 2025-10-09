@@ -23,21 +23,21 @@ function estop() { if (connected.value) serial.sendString(GCODE_CMD.stop()) }
 
 <template>
   <div class="toolbar-wrap">
-    <el-select v-model="port" class="ctrl-w-lg" placeholder="Select CH340 Port">
+    <!-- <el-select v-model="port" class="ctrl-w-lg" placeholder="Select CH340 Port">
       <el-option v-for="p in ports" :key="p.path" :label="p.friendlyName || p.path" :value="p.path" />
-    </el-select>
+    </el-select> -->
 
-    <el-select v-model="baud" class="ctrl-w-md">
+    <!-- <el-select v-model="baud" class="ctrl-w-md">
       <el-option v-for="b in baudRates" :key="b" :label="`${b} bps`" :value="b" />
-    </el-select>
+    </el-select> -->
 
-    <el-button type="primary" @click="toggleConnect">{{ connected ? 'Disconnect' : 'Connect' }}</el-button>
+    <!-- <el-button type="primary" @click="toggleConnect">{{ connected ? 'Disconnect' : 'Connect' }}</el-button>
 
-    <el-divider direction="vertical" />
+    <el-divider direction="vertical" /> -->
 
     <el-button type="primary" plain :disabled="!connected" @click="homing">Homing</el-button>
     <el-button type="warning" plain :disabled="!connected" @click="zeroPos">Zero Pos</el-button>
-    <el-button type="danger" :disabled="!connected" @click="estop">Stop</el-button>
+    <!-- <el-button type="danger" :disabled="!connected" @click="estop">Stop</el-button> -->
 
     <el-button @click="fitCam">Fit Camera</el-button>
 
