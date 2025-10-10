@@ -20,7 +20,7 @@ nsis:
   allowToChangeInstallationDirectory: true  # ให้ผู้ใช้เปลี่ยนโฟลเดอร์ติดตั้งได้
   createDesktopShortcut: true
   createStartMenuShortcut: true
-  artifactName: ${name}-${version}-setup.${ext}
+  artifactName: ${name}-${version}-WinX64-Setup.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
 mac:
