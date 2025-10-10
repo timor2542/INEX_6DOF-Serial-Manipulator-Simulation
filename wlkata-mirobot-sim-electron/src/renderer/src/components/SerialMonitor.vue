@@ -3,18 +3,18 @@
     <!-- ONE ROW: mode + input + actions -->
     <div class="flex serial-controls compact">
       <div class="serial-actions">
-        <el-button @click="clear">Clear</el-button>
+        <el-button @click="clear">Clear Console</el-button>
       </div>
     </div>
 
     <!-- Console area -->
     <div ref="view" class="console" style="flex:1; overflow:auto;">
       <div v-for="(l, i) in logs" :key="i">
-        <span>[{{ formatTime(new Date(l.ts)) }}] </span>
-        <span v-if="l.dir === 'out'">&gt;&gt;</span>
-        <span v-else-if="l.dir === 'in'">&lt;&lt;</span>
-        <span v-else>--</span>
-        <span> {{ l.text }}</span>
+        <span>[{{ formatTime(new Date(l.ts)) }}]</span>
+        <span v-if="l.dir === 'out'">&nbsp;&gt;&gt;&nbsp;</span>
+        <span v-else-if="l.dir === 'in'">&nbsp;&lt;&lt;&nbsp;</span>
+        <span v-else>&nbsp;</span>
+        <span>{{ l.text }}</span>
       </div>
     </div>
   </div>

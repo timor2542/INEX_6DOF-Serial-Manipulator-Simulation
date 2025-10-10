@@ -1,17 +1,45 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <title>Mi Robot Simulator</title>
-    <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
-    <meta
-      http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:"
-    />
-  </head>
 
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
-  </body>
+<head>
+  <meta charset="UTF-8" />
+  <title>Mi Robot Simulator</title>
+  <!-- https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP -->
+  <meta http-equiv="Content-Security-Policy"
+    content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:" />
+
+  <style>
+    /* ===== Global: ป้องกันคลุมข้อความทั้งแอป ===== */
+    html,
+    body,
+    #app {
+      -webkit-user-select: none;
+      /* Chrome/Safari/Electron */
+      -ms-user-select: none;
+      /* old Edge/IE */
+      user-select: none;
+    }
+
+    /* ===== Whitelist: อนุญาตให้เลือก/คัดลอกได้เฉพาะที่จำเป็น ===== */
+    input,
+    textarea,
+    [contenteditable],
+    .el-input__inner,
+    .el-textarea__inner,
+    .el-input-number .el-input__inner,
+    .el-color-dropdown__value input.el-input__inner,
+    .selectable {
+      /* ใส่คลาสนี้กับส่วนที่อยากให้เลือกได้ */
+      -webkit-user-select: text !important;
+      -ms-user-select: text !important;
+      user-select: text !important;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app"></div>
+  <script type="module" src="/src/main.js"></script>
+</body>
+
 </html>

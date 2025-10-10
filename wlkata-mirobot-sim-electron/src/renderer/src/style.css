@@ -24,22 +24,23 @@ html {
 body {
   font-size: 1rem;
 }
-h1 
-{
-    margin: 0px;
-    padding: 0px;
-    /* font-family: BebasNeue; */
-    /* color: #777878; */
-    font-size: 2vw;
+
+h1 {
+  margin: 0px;
+  padding: 0px;
+  /* font-family: BebasNeue; */
+  /* color: #777878; */
+  font-size: 2vw;
 }
-p
-{
-    margin: 0px;
-    padding: 0px;
-    /* font-family: BebasNeue; */
-    /* color: #777878; */
-    font-size: 0.5vw;
+
+p {
+  margin: 0px;
+  padding: 0px;
+  /* font-family: BebasNeue; */
+  /* color: #777878; */
+  font-size: 0.5vw;
 }
+
 :root {
   --bg: #1e1e1e;
   --fg: #eee;
@@ -216,6 +217,7 @@ body,
   height: 1.6em;
   border-color: rgba(127, 127, 127, 0);
 }
+
 /* Serial controls เท่านั้นที่ยืดเต็มแถวได้ */
 .serial-controls .el-input,
 .serial-controls .el-select {
@@ -272,7 +274,7 @@ body,
 
 /* ปุ่มเล็กใน viewer (Fit/Reset/+/−) ลด padding ลงเล็กน้อย */
 .viewer-overlay .el-button {
-  
+
   font-size: clamp(11px, 0.85vw, 36px) !important;
   padding: clamp(2px, 0.25vw, 6px) clamp(6px, 0.5vw, 10px);
 }
@@ -332,7 +334,7 @@ body,
 
 /* Status Bar อ่านง่ายขึ้น */
 .statusbar {
-  font-size: clamp(12px, 0.9vw, 16px);
+  font-size: 0.8vw;
 }
 
 /* Smooth theme switch */
@@ -392,6 +394,125 @@ body,
   box-shadow: 0 0 0 1px rgba(127, 127, 127, .25) inset;
 }
 
+.credits a {
+  text-decoration: none;
+}
+
+.credits a:hover {
+  text-decoration: underline;
+}
+
+/* === Color Picker HEX input: Dark theme readable === */
+.dark .el-color-picker__panel,
+.dark .el-popper.is-light {
+  /* พาเนลป็อปโอเวอร์ */
+  --el-bg-color-overlay: #0f172a;
+  /* slate-900 */
+  --el-text-color-regular: #e5e7eb;
+  /* text */
+  --el-border-color: #334155;
+}
+
+.dark .el-color-dropdown__value .el-input__wrapper {
+  background-color: #111827 !important;
+  /* bg input */
+  box-shadow: 0 0 0 1px #374151 inset !important;
+}
+
+.dark .el-color-dropdown__value input.el-input__inner {
+  color: #e5e7eb !important;
+  caret-color: #e5e7eb;
+}
+
+.dark .el-color-dropdown__value input.el-input__inner::placeholder {
+  color: #94a3b8;
+  /* placeholder */
+}
+
+/* แถบ spectrum กับ slider ยังเห็นกรอบ */
+.dark .el-color-predefine,
+.dark .el-color-dropdown__main-wrapper {
+  border-color: #334155 !important;
+}
+
+/* === Color Picker HEX input: Dark theme readable === */
+.dark .el-color-picker__panel,
+.dark .el-popper.is-light {
+  /* พาเนลป็อปโอเวอร์ */
+  --el-bg-color-overlay: #0f172a;
+  /* slate-900 */
+  --el-text-color-regular: #e5e7eb;
+  /* text */
+  --el-border-color: #334155;
+}
+
+.dark .el-color-dropdown__value .el-input__wrapper {
+  background-color: #111827 !important;
+  /* bg input */
+  box-shadow: 0 0 0 1px #374151 inset !important;
+}
+
+.dark .el-color-dropdown__value input.el-input__inner {
+  color: #e5e7eb !important;
+  caret-color: #e5e7eb;
+}
+
+.dark .el-color-dropdown__value input.el-input__inner::placeholder {
+  color: #94a3b8;
+  /* placeholder */
+}
+
+/* แถบ spectrum กับ slider ยังเห็นกรอบ */
+.dark .el-color-predefine,
+.dark .el-color-dropdown__main-wrapper {
+  border-color: #334155 !important;
+}
+
+:root {
+  /* Light */
+  --chip-bg: #eef2ff;
+  /* indigo-50 */
+  --chip-fg: #1e293b;
+  /* slate-800 */
+  --chip-br: #c7d2fe;
+  /* indigo-200 */
+}
+
+.dark {
+  /* Dark */
+  --chip-bg: rgba(148, 163, 184, .15);
+  /* slate-400/15 */
+  --chip-fg: #e5e7eb;
+  /* slate-200 */
+  --chip-br: #475569;
+  /* slate-600 */
+}
+
+.limit-chip {
+  display: inline-block;
+  padding: .15rem .4rem;
+  font-weight: 600;
+  font-size: .82rem;
+  letter-spacing: .2px;
+  border-radius: .4rem;
+  background: var(--chip-bg);
+  color: var(--chip-fg);
+  border: 1px solid var(--chip-br);
+  user-select: none;
+  /* ป้องกันคลุมข้อความตามที่คุณขอไว้ก่อนหน้า */
+  white-space: nowrap;
+}
+html.dark .el-color-picker__panel .el-input__wrapper{
+  background:#111827 !important;
+  box-shadow: 0 0 0 1px #374151 inset !important;
+}
+html.dark .el-color-picker__panel input.el-input__inner{
+  color:#e5e7eb !important;
+  caret-color:#e5e7eb !important;
+}
+html.dark .el-color-picker__panel input.el-input__inner::placeholder{
+  color:#94a3b8 !important;
+}
 /* จอเล็ก: ทำให้คอมโพเนนต์กะทัดรัดขึ้นอีกนิด */
 @media (max-width: 1280px) {
   :root {

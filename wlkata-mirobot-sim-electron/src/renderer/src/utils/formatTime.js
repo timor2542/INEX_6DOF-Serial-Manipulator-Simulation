@@ -6,5 +6,5 @@ export function formatTime(d) {
     const h = pad(d.getHours())
     const m = pad(d.getMinutes())
     const s = pad(d.getSeconds())
-    return `Current DateTime: ${Y}-${M}-${D} ${h}:${m}:${s}`
+    return `${Y}-${M}-${D} ${h}:${m}:${s}`
 }

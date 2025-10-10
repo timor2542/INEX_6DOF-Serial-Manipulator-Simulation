@@ -6,7 +6,7 @@ import icon from '../../resources/icon.png?asset'
 function createWindow() {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 1024,
+    width: 1366,
     height: 768,
     backgroundColor: '#1e1e1e',
     show: false,
@@ -22,11 +22,28 @@ function createWindow() {
     mainWindow.show()
   })
 
-  mainWindow.webContents.setWindowOpenHandler((details) => {
-    shell.openExternal(details.url)
-    return { action: 'deny' }
-  })
+  // mainWindow.webContents.setWindowOpenHandler((details) => {
+  //   shell.openExternal(details.url)
+  //   return { action: 'deny' }
+  // })
+  // mainWindow.webContents.on('new-window', function (e, url) {
+  //   e.preventDefault();
+  //   shell.openExternal(url);
+  // });
 
+    // 1) บล็อก window.open แล้วสั่งเปิดภายนอก
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    if (/^https?:\/\//i.test(url)) shell.openExternal(url);
+    return { action: 'deny' };
+  });
+
+  // 2) บล็อกการนำทางออกนอกแอป (คลิกลิงก์ภายใน)
+  mainWindow.webContents.on('will-navigate', (e, url) => {
+    if (/^https?:\/\//i.test(url)) {
+      e.preventDefault();
+      shell.openExternal(url);
+    }
+  });
   // HMR for renderer base on electron-vite cli.
   // Load the remote URL for development or the local html file for production.
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {

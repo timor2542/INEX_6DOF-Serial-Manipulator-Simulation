@@ -1,10 +1,11 @@
 {
-  "name": "wlkata-mirobot-sim-electron",
+  "name": "mirobotsimulator",
   "version": "1.0.0",
-  "description": "Electron + Vite + Vue3 simulator for WLKATA 6DOF with Web Serial, Three.js STL viewer, Jog controls, and theme Auto.",
+  "description": "WLKATA Mirobot 6-DOF simulator with joint-only jog controls (No Serial/TCP).",
   "main": "./out/main/index.js",
-  "author": "example.com",
-  "homepage": "https://electron-vite.org",
+  "author": "INEX (THAILAND) Co,Ltd.",
+  "keywords": ["WLKATA", "Mirobot", "6DOF", "robotics", "simulator", "joint-jog", "STL"],
+  "homepage": "https://www.inex.co.th",
   "scripts": {
     "format": "prettier --write .",
     "lint": "eslint --cache .",

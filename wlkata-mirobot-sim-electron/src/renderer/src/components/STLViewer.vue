@@ -1,27 +1,28 @@
 <template>
   <div ref="wrap" class="viewer-root">
-  <div ref="canvasHost" class="canvas-host"></div>
+    <div ref="canvasHost" class="canvas-host"></div>
 
     <!-- Overlay controls -->
     <div class="viewer-overlay">
       <el-checkbox v-model="ui.showGrid" @change="applyVisibility">Grid</el-checkbox>
       <el-checkbox v-model="ui.showWorldFrame" @change="applyVisibility">World Frame</el-checkbox>
       <el-checkbox v-model="ui.showLinkFrames" @change="applyVisibility">Link Frames</el-checkbox>
-      <el-checkbox v-model="ui.showTcpFrame" @change="applyVisibility">TCP</el-checkbox>
+      <el-checkbox v-model="ui.showTcpFrame" @change="applyVisibility">TCP Frame</el-checkbox>
       <el-checkbox v-model="ui.showLabels" @change="applyVisibility">Labels</el-checkbox>
 
+      <span style="opacity:.8;">&emsp;X</span>
+      <el-color-picker v-model="ui.colors.x" size="small" @change="rebuildFrames" />
+      <span style="opacity:.8;">&ensp;Y</span>
+      <el-color-picker v-model="ui.colors.y" size="small" @change="rebuildFrames" />
+      <span style="opacity:.8;">&ensp;Z</span>
+      <el-color-picker v-model="ui.colors.z" size="small" @change="rebuildFrames" />
 
       <el-divider direction="horizontal" />
-      <span style="opacity:.8;">X</span>
-      <el-color-picker v-model="ui.colors.x" size="small" @change="rebuildFrames" />
-      <span style="opacity:.8;">Y</span>
-      <el-color-picker v-model="ui.colors.y" size="small" @change="rebuildFrames" />
-      <span style="opacity:.8;">Z</span>
-      <el-color-picker v-model="ui.colors.z" size="small" @change="rebuildFrames" />
-      <span style="opacity:.8; margin-left:6px;">Link Len</span>
+      <span style="opacity:.8; margin-left:6px;">Link Frame Length</span>
       <el-input-number v-model="ui.linkLen" :min="0.02" :max="0.4" :step="0.01" size="small" @change="rebuildFrames" />
-      <span style="opacity:.8;">TCP Len</span>
+      <span style="opacity:.8;">mm&emsp;TCP Frame Length</span>
       <el-input-number v-model="ui.tcpZLen" :min="0.04" :max="0.6" :step="0.01" size="small" @change="rebuildFrames" />
+      <span style="opacity:.8;">mm</span>
 
       <el-divider direction="horizontal" />
       <el-button style="width:7%" size="large" @click="zoomIn">Zoom In</el-button>
@@ -29,37 +30,39 @@
       <el-button style="width:10%;" size="large" @click="reset">Reset Camera</el-button>
       <el-button type="primary" style="width:10%;" size="large" @click="home">Set Home Config</el-button>
     </div>
-      <!-- TCP Pose (ขวาบน) -->
-      <div class="pose-overlay">
-        <div style="opacity:.85; margin-bottom:6px; font-size: 1.2vw; font-weight:600;">TCP Pose</div>
-        <div style="font-size: 1.05vw; display:grid; grid-template-columns: 18px 1fr; gap:6px;">
-          <span>X</span><span>{{ fmt(eePose.x) }} mm</span>
-          <span>Y</span><span>{{ fmt(eePose.y) }} mm</span>
-          <span>Z</span><span>{{ fmt(eePose.z) }} mm</span>
-          <span style="opacity:.8; grid-column:1 / -1; margin-top:4px;">— RPY (deg, XYZ) —</span>
-          <span>Rx</span><span>{{ fmt(eePose.rx) }} °</span>
-          <span>Ry</span><span>{{ fmt(eePose.ry) }} °</span>
-          <span>Rz</span><span>{{ fmt(eePose.rz) }} °</span>
-        </div>
-      </div>
-    <!-- Jog sliders -->
-    <div class="jog-overlay"
-      style="position:absolute; bottom:10px; left:10px; width:40%; background:rgba(0,0,0,0.3); border-radius:8px; padding:10px;">
+    <!-- TCP Pose (ขวาบน) -->
+    <div class="jog-overlay">
       <div v-for="(q, i) in robot.joints || []" :key="i"
         style="display:flex; align-items:center; gap:6px; margin:4px 0;">
         <span style="color:white; width:40px;">q{{ i + 1 }}</span>
 
+        <el-slider :model-value="robot.joints[i]" @update:modelValue="val => clampToLimit(i, val)"
+          @input="val => clampToLimit(i, val)" :min="jointLimits[i]?.min ?? -180" :max="jointLimits[i]?.max ?? 180"
+          :step="1" style="flex:1;" />
 
-        <el-slider v-model="robot.joints[i]" :min="jointLimits[i]?.min ?? -180" :max="jointLimits[i]?.max ?? 180"
-          :step="1" style="flex:1;" @input="onJog(i, robot.joints[i])" @change="onJogEnd(i, robot.joints[i])" />
+        <div style="display:flex; align-items:center; gap:6px;">
+          <el-button @click="stepJoint(i, -1)" size="small" circle>-</el-button>
 
-        <el-input-number v-model="robot.joints[i]" :min="jointLimits[i]?.min ?? -180" :max="jointLimits[i]?.max ?? 180"
-          :step="1" size="small" style="width:7rem" />
+          <el-input :model-value="jointTexts[i]" @input="val => onInputJoint(i, val)"
+            @change="val => onInputJoint(i, val)" size="small" style="width:3.5rem; text-align:center;"
+            inputmode="numeric" />
 
-        <span style="color:#ccc; font-size:0.8rem; width:5.5rem; text-align:right;">
+          <el-button @click="stepJoint(i, +1)" size="small" circle>+</el-button>
+        </div>
+        <span class="limit-chip" style="font-size:0.8rem; width:5.5rem; text-align:right;">
           [{{ jointLimits[i]?.min ?? -180 }}°, {{ jointLimits[i]?.max ?? 180 }}°]
         </span>
 
+      </div>
+    </div>
+    <!-- Jog sliders -->
+    <div class="pose-overlay">
+      <div>TCP Pose</div>
+      <div style="display:grid; grid-template-columns: 18x 1fr; gap:6px;">
+        <span style="opacity:.8; grid-column:1 / -1; margin-top:4px;">— Position (X, Y, Z) —</span>
+        <span>({{ fmt(eePose.x) }}, {{ fmt(eePose.y) }}, {{ fmt(eePose.z) }}) mm</span>
+        <span style="opacity:.8; grid-column:1 / -1; margin-top:4px;">— Orientation (Rx, Ry, Rz) —</span>
+        <span>({{ fmt(eePose.rx) }}, {{ fmt(eePose.ry) }}, {{ fmt(eePose.rz) }}) °</span>
       </div>
     </div>
   </div>
@@ -82,9 +85,6 @@ function fmt(n, d = 2) { return Number(n).toFixed(d) }
 const serial = useSerialStore()
 const { connected, logs } = storeToRefs(serial)
 
-// const outgoing = ref('')
-// const mode = ref('string')
-// const view = ref(null)
 const canvasHost = ref(null)
 let renderer, scene, camera, controls, animId, ro
 const robot = useRobotStore()
@@ -119,6 +119,56 @@ const jogState = {
   lastTs: Array(6).fill(0),             // เวลาที่ log ไปล่าสุด (ต่อข้อ)
   pending: Array(6).fill(null),         // ค่าที่รอ log (ต่อข้อ)
   raf: null
+}
+// Clamp a joint value to its [min, max] and write it back immediately.
+// This keeps the input/slider in-range even while typing.
+function clampToLimit(i, v) {
+  const { min, max } = jointLimits[i] ?? { min: -180, max: 180 }
+  let nv = Number(v)
+  if (!Number.isFinite(nv)) nv = 0
+  if (nv < min) nv = min
+  if (nv > max) nv = max
+  robot.joints[i] = nv
+  return nv
+}
+
+// text shown in the input for each joint (keeps UI and model in sync)
+const jointTexts = ref(robot.joints.map(v => String(Math.round(v))))
+
+// keep text in sync when robot.joints is changed elsewhere (e.g., Home)
+watch(() => robot.joints.slice(), now => {
+  jointTexts.value = now.map(v => String(Math.round(v)))
+}, { deep: false })
+
+function clampDeg(i, vNum) {
+  const { min, max } = jointLimits[i] ?? { min: -180, max: 180 }
+  const n = Math.round(Number(vNum))
+  return Math.min(max, Math.max(min, n))
+}
+
+// called on typing/commit in the input
+function onInputJoint(i, raw) {
+  // allow transient blanks while typing
+  if (raw === '' || raw === '-' || raw === '+') {
+    jointTexts.value[i] = raw
+    return
+  }
+  const n = Number(raw)
+  if (!Number.isFinite(n)) {
+    // revert to current model if non-numeric junk
+    jointTexts.value[i] = String(robot.joints[i])
+    return
+  }
+  const clamped = clampDeg(i, n)
+  jointTexts.value[i] = String(clamped)   // update visible text immediately
+  robot.joints[i] = clamped               // update model (FK runs, sliders move)
+}
+
+// step buttons (– / +)
+function stepJoint(i, delta) {
+  const clamped = clampDeg(i, Number(robot.joints[i]) + delta)
+  robot.joints[i] = clamped
+  jointTexts.value[i] = String(clamped)
 }
 
 function logJog(i, fromDeg, toDeg) {
@@ -250,8 +300,6 @@ function home() {
   })
 }
 
-
-
 const ui = reactive({
   showGrid: true,
   showWorldFrame: true,
@@ -313,6 +361,10 @@ function init() {
 /* =========================================
    Load STL
    ========================================= */
+// ให้ Vite สร้างแผนที่ไฟล์เป็น URL
+/** @type {Record<string, string>} */
+const stlMap = import.meta.glob('/src/assets/stl/*.stl', { eager: true, query: '?url', import: 'default' })
+
 function loadSTLs() {
   const loader = new STLLoader()
   const names = ['base', ...linkNames]
@@ -320,11 +372,22 @@ function loadSTLs() {
   loaded = 0
 
   names.forEach((n, i) => {
-    loader.load(`/src/assets/stl/${n}.stl`,
-      geo => {
+    const key = `/src/assets/stl/${n}.stl`
+    const url = stlMap[key] // เป็น string ตาม JSDoc ด้านบน
+
+    if (!url) {
+      console.warn('STL not found:', key)
+      afterOneLoaded()
+      return
+    }
+
+    loader.load(
+      url,
+      (geo) => {
         geo.computeVertexNormals()
         const mat = new THREE.MeshStandardMaterial({
-          color: i === 0 ? 0x616161 : (i === 2 || i === 4) ? 0xf57c00 : 0xbdbdbd, metalness: 0.2, roughness: 0.7
+          color: i === 0 ? 0x616161 : (i === 2 || i === 4) ? 0xf57c00 : 0xbdbdbd,
+          metalness: 0.2, roughness: 0.7
         })
         const mesh = new THREE.Mesh(geo, mat)
         mesh.name = n
@@ -526,23 +589,23 @@ function anim() {
     mesh.quaternion.copy(quat)
   })
 
-// === Update TCP pose (use last transform Ts[5]) ===
-if (Ts.length > 0) {
-  const T = Ts[Ts.length - 1]           // T_0_6 (สมมติ MDH 6 joint)
-  const p = new THREE.Vector3()
-  const q = new THREE.Quaternion()
-  const s = new THREE.Vector3()
-  T.decompose(p, q, s)
-  // ตำแหน่งใน "เมตร" -> แปลงเป็น "มิลลิเมตร"
-  eePose.x = p.x * 1000
-  eePose.y = p.y * 1000
-  eePose.z = p.z * 1000
-  // มุม RPY (XYZ) หน่วย "องศา"
-  const e = new THREE.Euler().setFromQuaternion(q, 'XYZ')
-  eePose.rx = e.x * 180 / Math.PI
-  eePose.ry = e.y * 180 / Math.PI
-  eePose.rz = e.z * 180 / Math.PI
-}
+  // === Update TCP pose (use last transform Ts[5]) ===
+  if (Ts.length > 0) {
+    const T = Ts[Ts.length - 1]           // T_0_6 (สมมติ MDH 6 joint)
+    const p = new THREE.Vector3()
+    const q = new THREE.Quaternion()
+    const s = new THREE.Vector3()
+    T.decompose(p, q, s)
+    // ตำแหน่งใน "เมตร" -> แปลงเป็น "มิลลิเมตร"
+    eePose.x = p.x * 1000
+    eePose.y = p.y * 1000
+    eePose.z = p.z * 1000
+    // มุม RPY (XYZ) หน่วย "องศา"
+    const e = new THREE.Euler().setFromQuaternion(q, 'XYZ')
+    eePose.rx = e.x * 180 / Math.PI
+    eePose.ry = e.y * 180 / Math.PI
+    eePose.rz = e.z * 180 / Math.PI
+  }
 
 
 
@@ -585,70 +648,79 @@ onBeforeUnmount(() => {
 
 <style scoped>
 [ref="wrap"] {
-  position: relative; /* มีอยู่แล้วก็ข้าม */
+  position: relative;
+  /* มีอยู่แล้วก็ข้าม */
   overflow: hidden;
 }
 
 /* แคนวาสอยู่ล่างสุด */
-:deep(canvas){
-  display:block;
-  width:100%!important;
-  height:100%!important;
-  z-index:0;
+:deep(canvas) {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 0;
 }
+
 /* style scoped */
-.viewer-root{
+.viewer-root {
   position: relative;
   width: 100%;
   height: 100%;
-  overflow: hidden;        /* กันเกิดสกรอลล์บาร์ */
+  overflow: hidden;
+  /* กันเกิดสกรอลล์บาร์ */
 }
-.canvas-host{
+
+.canvas-host {
   position: absolute;
-  inset: 0;                /* top/right/bottom/left = 0 */
+  inset: 0;
+  /* top/right/bottom/left = 0 */
 }
+
 /* แถบซ้ายบน */
-.viewer-overlay{
-  position:absolute;
-  top:10px;
-  left:10px;
-  display:flex;
-  gap:6px;
-  align-items:center;
-  flex-wrap:wrap;
+.viewer-overlay {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
   z-index: 20;
-  pointer-events:auto;
+  pointer-events: auto;
 }
 
 /* TCP Pose — ขวาบนจริง ๆ */
-.pose-overlay{
-  position:absolute;
-  top:10px;
-  right:10px;
-  z-index: 30;                 /* สูงกว่า overlay อื่นๆ */
-  background:rgba(0,0,0,.45);
-  color:#fff;
-  padding:10px 12px;
-  border-radius:8px;
-  font-size:12px;
-  line-height:1.2;
+.jog-overlay {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  z-index: 30;
+  /* สูงกว่า overlay อื่นๆ */
+  background: rgba(0, 0, 0, 0.7);
+  color: #fff;
+  padding: 10px 10px;
+  border-radius: 8px;
+  font-size: 0.95vw;
+  line-height: 1.2;
   backdrop-filter: blur(6px);
-  min-width: 220px;
-  pointer-events:auto;         /* คลิกได้เอง */
+  min-width: 300px;
+  width: 30%;
+  pointer-events: auto;
+  /* คลิกได้เอง */
 }
 
 /* แผง jog ซ้ายล่าง */
-.jog-overlay{
-  position:absolute;
-  left:10px;
-  bottom:10px;
-  width:50%;
-  background:rgba(0,0,0,0.3);
-  border-radius:8px;
-  padding:10px;
-  backdrop-filter: blur(6px);
+.pose-overlay {
+  position: absolute;
+  left: 10px;
+  bottom: 10px;
+  /* width: 40%; */
+  background: rgba(0, 0, 0, 0);
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 0.7vw;
+  /* backdrop-filter: blur(6px); */
   z-index: 20;
-  pointer-events:auto;
+  pointer-events: auto;
 }
-
 </style>

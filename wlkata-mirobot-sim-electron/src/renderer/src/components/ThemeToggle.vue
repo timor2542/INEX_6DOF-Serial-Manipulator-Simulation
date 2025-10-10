@@ -1,8 +1,9 @@
 <template>
-  <el-select v-model="localMode" size="default" style="width: 180px" @change="onChange">
-    <el-option label="Dark Theme" value="dark" />
-    <el-option label="Light Theme" value="light" />
-    <el-option label="Auto Theme" value="auto" />
+  Theme : 
+  <el-select v-model="localMode" size="default" style="width: 100px" @change="onChange">
+    <el-option label="Dark" value="dark" />
+    <el-option label="Light" value="light" />
+    <el-option label="Auto" value="auto" />
   </el-select>
 </template>
 

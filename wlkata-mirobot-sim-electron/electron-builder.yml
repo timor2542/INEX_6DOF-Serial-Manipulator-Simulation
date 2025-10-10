@@ -1,5 +1,5 @@
-appId: com.electron.app
-productName: wlkata-mirobot-sim-electron
+appId: com.inex.th.electron.app
+productName: Mirobot Simulator
 directories:
   buildResources: build
 files:
@@ -11,12 +11,18 @@ files:
 asarUnpack:
   - resources/**
 win:
-  executableName: wlkata-mirobot-sim-electron
+  target: nsis
+  executableName: mirobosim
 nsis:
+  oneClick: false                       # <-- สำคัญ: ปิด One-Click
+  perMachine: false                     # ติดตั้งเฉพาะผู้ใช้คนนี้ (ไม่ต้อง admin), ตั้ง true ถ้าอยากติดตั้งแบบ machine-wide
+  allowElevation: true                  # ขอสิทธิ์สูงเมื่อจำเป็น
+  allowToChangeInstallationDirectory: true  # ให้ผู้ใช้เปลี่ยนโฟลเดอร์ติดตั้งได้
+  createDesktopShortcut: true
+  createStartMenuShortcut: true
   artifactName: ${name}-${version}-setup.${ext}
   shortcutName: ${productName}
   uninstallDisplayName: ${productName}
-  createDesktopShortcut: always
 mac:
   entitlementsInherit: build/entitlements.mac.plist
   extendInfo:
