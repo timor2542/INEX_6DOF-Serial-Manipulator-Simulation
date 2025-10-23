@@ -212,16 +212,6 @@ function onJog(i, val) {
   }
 }
 
-function onJogEnd(i, val) {
-  // ปล่อยเมาส์/จบ gesture -> บังคับ log ค่าสุดท้ายถ้าต่างจากที่เคย log
-  const last = jogState.prevLogged[i]
-  if (val !== last) {
-    logJog(i, last, val)
-    jogState.prevLogged[i] = val
-    jogState.lastTs[i] = performance.now()
-    jogState.pending[i] = null
-  }
-}
 /* =========================================
    Transform: Tx·Rx·Tz·Rz
    ========================================= */

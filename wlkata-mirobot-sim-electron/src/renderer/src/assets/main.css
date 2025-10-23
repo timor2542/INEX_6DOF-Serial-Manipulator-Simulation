@@ -1,5 +1,8 @@
 @import './base.css';
 
+/* ------------------------------
+   GLOBAL STYLE
+------------------------------ */
 body {
   display: flex;
   align-items: center;
@@ -11,10 +14,6 @@ body {
 }
 
 code {
-  font-weight: 600;
-  padding: 3px 5px;
-  border-radius: 2px;
-  background-color: var(--color-background-mute);
   font-family:
     ui-monospace,
     SFMono-Regular,
@@ -24,21 +23,31 @@ code {
     Liberation Mono,
     monospace;
   font-size: 85%;
+  font-weight: 600;
+  padding: 3px 5px;
+  border-radius: 2px;
+  background-color: var(--color-background-mute);
 }
 
+/* ------------------------------
+   LAYOUT
+------------------------------ */
 #app {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
   margin-bottom: 80px;
 }
 
+/* ------------------------------
+   COMPONENTS
+------------------------------ */
 .logo {
+  width: 128px;
+  height: 128px;
   margin-bottom: 20px;
   -webkit-user-drag: none;
-  height: 128px;
-  width: 128px;
   will-change: filter;
   transition: filter 300ms;
 }
@@ -48,28 +57,28 @@ code {
 }
 
 .creator {
+  margin-bottom: 10px;
   font-size: 14px;
   line-height: 16px;
-  color: var(--ev-c-text-2);
   font-weight: 600;
-  margin-bottom: 10px;
+  color: var(--ev-c-text-2);
 }
 
 .text {
-  font-size: 28px;
-  color: var(--ev-c-text-1);
-  font-weight: 700;
-  line-height: 32px;
-  text-align: center;
   margin: 0 10px;
   padding: 16px 0;
+  font-size: 28px;
+  line-height: 32px;
+  font-weight: 700;
+  text-align: center;
+  color: var(--ev-c-text-1);
 }
 
 .tip {
   font-size: 16px;
   line-height: 24px;
-  color: var(--ev-c-text-2);
   font-weight: 600;
+  color: var(--ev-c-text-2);
 }
 
 .vue {
@@ -82,10 +91,10 @@ code {
 
 .actions {
   display: flex;
-  padding-top: 32px;
-  margin: -6px;
   flex-wrap: wrap;
   justify-content: flex-start;
+  margin: -6px;
+  padding-top: 32px;
 }
 
 .action {
@@ -94,18 +103,18 @@ code {
 }
 
 .action a {
-  cursor: pointer;
-  text-decoration: none;
   display: inline-block;
-  border: 1px solid transparent;
   text-align: center;
-  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
   white-space: nowrap;
-  border-radius: 20px;
-  padding: 0 20px;
-  line-height: 38px;
+
   font-size: 14px;
-  border-color: var(--ev-button-alt-border);
+  font-weight: 600;
+  line-height: 38px;
+  padding: 0 20px;
+  border-radius: 20px;
+  border: 1px solid var(--ev-button-alt-border);
   color: var(--ev-button-alt-text);
   background-color: var(--ev-button-alt-bg);
 }
@@ -121,11 +130,16 @@ code {
   bottom: 30px;
   margin: 0 auto;
   padding: 15px 0;
-  font-family: 'Menlo', 'Lucida Console', monospace;
+
   display: inline-flex;
-  overflow: hidden;
   align-items: center;
+  overflow: hidden;
   border-radius: 22px;
+
+  font-family: 'Menlo', 'Lucida Console', monospace;
+  font-size: 14px;
+  line-height: 14px;
+
   background-color: #202127;
   backdrop-filter: blur(24px);
 }
@@ -133,17 +147,18 @@ code {
 .versions li {
   display: block;
   float: left;
-  border-right: 1px solid var(--ev-c-gray-1);
   padding: 0 20px;
-  font-size: 14px;
-  line-height: 14px;
+  border-right: 1px solid var(--ev-c-gray-1);
   opacity: 0.8;
-
-  &:last-child {
-    border: none;
-  }
 }
 
+.versions li:last-child {
+  border: none;
+}
+
+/* ------------------------------
+   MEDIA QUERIES
+------------------------------ */
 @media (max-width: 720px) {
   .text {
     font-size: 20px;
@@ -157,7 +172,6 @@ code {
 }
 
 @media (max-width: 350px) {
-
   .tip,
   .actions {
     display: none;

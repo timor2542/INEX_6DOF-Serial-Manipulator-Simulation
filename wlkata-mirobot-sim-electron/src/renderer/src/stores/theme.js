@@ -1,13 +1,12 @@
 // src/stores/theme.js
 import { defineStore } from 'pinia'
-
 /**
  * Theme store
  * mode: 'auto' | 'dark' | 'light'
- * - auto: ตามเวลา (กลางวัน=light, กลางคืน=dark) — คุณจะเปลี่ยนเป็นตาม OS ก็ได้
- * การสลับธีม:
- * - เพิ่ม/ลบ class 'dark' บน <html> เพื่อให้ Element Plus เปลี่ยนพาเล็ต
- * - เพิ่ม/ลบ class 'light' บน <body> เพื่อคุมสี custom ของเรา
+ * - auto: follows time (day = light, night = dark) — you can also change it to follow the OS setting
+ * Theme switching:
+ * - Add or remove the 'dark' class on <html> to let Element Plus switch its palette
+ * - Add or remove the 'light' class on <body> to control our custom colors
  */
 export const useThemeStore = defineStore('theme', {
   state: () => ({
@@ -26,8 +25,8 @@ export const useThemeStore = defineStore('theme', {
         const h = new Date().getHours()
         isDark = !(h >= 7 && h < 18)
       }
-      document.documentElement.classList.toggle('dark', isDark) // ให้ EP ไป dark
-      document.body.classList.toggle('light', !isDark)          // ใช้ตัวแปรสี custom
+      document.documentElement.classList.toggle('dark', isDark) // make Element Plus use dark palette
+      document.body.classList.toggle('light', !isDark)          // use our custom color variables
     }
   }
 })

@@ -1,7 +1,7 @@
 <template>
   <div class="flex-col">
-    <!-- สลับโหมดใหญ่: Joint / Coord -->
-    <!-- <el-segmented v-model="bigMode" :options="['Joint', 'Coord']" class="w-full" /> -->
+    <!-- Main mode switch: Joint / Coord -->
+    <el-segmented v-model="bigMode" :options="['Joint', 'Coord']" class="w-full" />
 
     <!-- ===== JOINT ===== -->
     <div v-if="bigMode === 'Joint'" class="flex-col">
@@ -27,7 +27,7 @@
     </div>
 
     <!-- ===== Controls: Step / Speed / Gripper ===== -->
-    <div class="flex" style="align-items:center; gap: var(--gap);">
+    <div class="flex" style="align-items: center; gap: var(--gap)">
       <div class="axis-footer">
         <div class="axis-footer-label">Step</div>
         <el-input-number v-model="step" :min="0.1" :max="50" :step="0.1" controls-position="both"
@@ -42,7 +42,7 @@
 
       <div class="flex-1"></div>
 
-      <span style="opacity:.7; margin-right:6px;">Gripper</span>
+      <span style="opacity: 0.7; margin-right: 6px">Gripper</span>
       <el-switch v-model="gripper" active-text="ON" inactive-text="OFF" @change="toggleGripper" />
     </div>
   </div>
@@ -59,31 +59,37 @@ const serial = useSerialStore()
 const { joints } = storeToRefs(robot)
 
 const bigMode = ref('Joint')
-const step = ref(5)       // ระยะ jog ต่อครั้ง (mm หรือ deg) — ใช้กับปุ่ม footer
-const speed = ref(2000)    // feedrate
+const step = ref(5) // Jog distance per move (mm or deg) — used by footer buttons
+const speed = ref(2000) // Feedrate
 const gripper = ref(false)
 const cart = ref({ X: 0, Y: 0, Z: 0 })
 const ang = ref({ Rx: 0, Ry: 0, Rz: 0 })
 
-const fmt = v => (Number(v || 0)).toFixed(1)
+const fmt = (v) => Number(v || 0).toFixed(1)
 
 /* ===== JOINT ===== */
 function onJointSlider() {
   robot.updateJoints([...joints.value])
   if (!serial.connected) return
   const [j1, j2, j3, j4, j5, j6] = robot.joints
-  serial.sendString(`G0 J1=${j1.toFixed(2)} J2=${j2.toFixed(2)} J3=${j3.toFixed(2)} J4=${j4.toFixed(2)} J5=${j5.toFixed(2)} J6=${j6.toFixed(2)}\n`)
+  serial.sendString(
+    `G0 J1=${j1.toFixed(2)} J2=${j2.toFixed(2)} J3=${j3.toFixed(2)} J4=${j4.toFixed(2)} J5=${j5.toFixed(2)} J6=${j6.toFixed(2)}\n`
+  )
 }
 
 /* ===== COORD ===== */
 function onCartSlider(ax) {
   if (!serial.connected) return
-  const X = cart.value.X ?? 0, Y = cart.value.Y ?? 0, Z = cart.value.Z ?? 0
+  const X = cart.value.X ?? 0,
+    Y = cart.value.Y ?? 0,
+    Z = cart.value.Z ?? 0
   serial.sendString(`G1 X=${X.toFixed(2)} Y=${Y.toFixed(2)} Z=${Z.toFixed(2)} F=${speed.value}\n`)
 }
 function onAngSlider(ax) {
   if (!serial.connected) return
-  const A = ang.value.Rx ?? 0, B = ang.value.Ry ?? 0, C = ang.value.Rz ?? 0
+  const A = ang.value.Rx ?? 0,
+    B = ang.value.Ry ?? 0,
+    C = ang.value.Rz ?? 0
   serial.sendString(`G1 A=${A.toFixed(2)} B=${B.toFixed(2)} C=${C.toFixed(2)} F=${speed.value}\n`)
 }
 
@@ -103,16 +109,16 @@ function toggleGripper(on) {
 
 .axis-label {
   width: clamp(42px, 4vw, 64px);
-  opacity: .9;
+  opacity: 0.9;
 }
 
 .axis-value {
   width: clamp(74px, 6vw, 96px);
   text-align: right;
-  opacity: .9;
+  opacity: 0.9;
 }
 
-/* Footer block (Step/Speed) แบบกะทัดรัด */
+/* Footer block (Step/Speed) compact style */
 .axis-footer {
   display: flex;
   align-items: center;
@@ -120,10 +126,10 @@ function toggleGripper(on) {
 }
 
 .axis-footer-label {
-  opacity: .9;
+  opacity: 0.9;
 }
 
-/* ทำให้ input-number เหลือเฉพาะปุ่ม –/+ ดูคอมแพ็ค */
+/* Make input-number compact: only show +/- buttons */
 .compact-numeric .el-input__wrapper {
   width: 90px;
 }
@@ -131,6 +137,6 @@ function toggleGripper(on) {
 .compact-numeric .el-input__inner {
   padding: 0;
   text-align: center;
-  opacity: .85;
+  opacity: 0.85;
 }
 </style>

@@ -15,10 +15,10 @@ const theme = useThemeStore()
 const localMode = ref(theme.mode)
 
 function onChange(v) {
-  theme.setMode(v)           // เปลี่ยนทั้งแอป
-  // ไม่ต้องทำอย่างอื่น—STLViewer จะเชื่อมโยงเองด้วย watch ที่ไฟล์นั้น
+  theme.setMode(v)           // switch the theme app-wide
+  // Nothing else needed — STLViewer will react via its own watch in that file
 }
 
-// ถ้า mode ถูกเปลี่ยนจากที่อื่น (เช่น Viewer เคยสลับ) ให้ sync dropdown ด้วย
+// If the mode was changed elsewhere (e.g., the Viewer toggled it), sync the dropdown
 watch(() => theme.mode, v => { if (v !== localMode.value) localMode.value = v })
 </script>
